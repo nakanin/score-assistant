@@ -1,19 +1,25 @@
 <template>
   <div id="app">
-    <p>ただ今の時刻は {{ nowTimeLabel }} です。</p>
-    <p>{{ startTimeLabel }} から {{ elapsedMH }} h 経過しています。</p>
+    <section class="section">
+      <div class="container">
+        <p class="is-size-3">ただ今の時刻は {{ nowTimeLabel }} です。</p>
+        <p class="is-size-3">{{ startTimeLabel }} から <span class="is-size-1">{{ elapsedMH }} h</span> 経過しています。</p>
+      </div>
+    </section>
 
     <section>
-      <button class="button is-primary"
-          @click="isSetting = true">
-          設定
-      </button>
+      <div class="container">
+        <button class="button is-primary"
+            @click="isSetting = true">
+            設定
+        </button>
 
-      <b-modal :active.sync="isSetting"
-          has-modal-card
-          @close="updateStartTime">
-        <Settings />
-      </b-modal>
+        <b-modal :active.sync="isSetting"
+            has-modal-card
+            @close="updateStartTime">
+          <Settings />
+        </b-modal>
+      </div>
     </section>
   </div>
 </template>
