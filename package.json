@@ -9,6 +9,7 @@
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
   "dependencies": {
+    "buefy": "^0.8.9",
     "source-map-support": "^0.5.12"
   },
   "devDependencies": {

@@ -1,13 +1,29 @@
 <template>
   <div id="app">
-    <p>ただ今の時刻は {{ nowTime }} です。</p>
-    <p>{{ startTime }} から {{ elapsedMH }} h 経過しています。</p>
+    <p>ただ今の時刻は {{ nowTimeLabel }} です。</p>
+    <p>{{ startTimeLabel }} から {{ elapsedMH }} h 経過しています。</p>
+
+    <section>
+      <button class="button is-primary"
+          @click="isSetting = true">
+          設定
+      </button>
+
+      <b-modal :active.sync="isSetting"
+          has-modal-card
+          @close="updateStartTime">
+        <Settings />
+      </b-modal>
+    </section>
   </div>
 </template>
 
 <script>
-const getTime = (hour, minute) => {
-  let result = new Date()
+import { loadStartTime } from './settingService'
+import Settings from './Settings.vue'
+
+function getTime(hour, minute) {
+  const result = new Date()
   result.setHours(hour)
   result.setMinutes(minute)
   return result.getTime()
@@ -15,18 +31,21 @@ const getTime = (hour, minute) => {
 
 export default {
   name: 'App',
+  components: {
+    Settings
+  },
   data () {
     return {
-      startHour: 8,
-      startMinute: 30
+      isSetting: false,
+      startTime: loadStartTime()
     }
   },
   computed: {
-    nowTime () {
-      return new Date().toTimeString()
+    nowTimeLabel () {
+      return new Date().toTimeString().substring(0, 5)
     },
-    startTime () {
-      return this.startHour + ':' + this.startMinute
+    startTimeLabel () {
+      return this.startTime.getHours() + ':' + this.startTime.getMinutes()
     },
     elapsedMH () {
       let now = Date.now()
@@ -35,9 +54,14 @@ export default {
       } else if (getTime(11, 45) < now) {
         now = getTime(11, 45)
       }
-      const elapsedMinutes = (now - getTime(this.startHour, this.startMinute)) / 1000 / 60
+      const elapsedMinutes = (now - this.startTime.getTime()) / 1000 / 60
 
       return Math.floor(elapsedMinutes / 15) / 4
+    }
+  },
+  methods: {
+    updateStartTime () {
+      this.startTime = loadStartTime()
     }
   }
 }
