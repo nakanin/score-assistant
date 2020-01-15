@@ -7,7 +7,7 @@
       </div>
     </section>
 
-    <section>
+    <section class="section">
       <div class="container">
         <button class="button is-primary"
             @click="isSetting = true">
