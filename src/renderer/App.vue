@@ -44,33 +44,32 @@ export default {
     return {
       isSetting: false,
       startTime: loadStartTime(),
-      nowTimeLabel: null,
-      elapsedMH: null
+      nowTime: new Date()
     }
   },
   mounted () {
-    this.updateTime()
-    setInterval(this.updateTime, 60*1000)
+    setInterval(() => this.nowTime = new Date(), 60*1000)
   },
   computed: {
+    nowTimeLabel () {
+      return this.nowTime.toTimeString().substring(0, 5)
+    },
     startTimeLabel () {
       return this.startTime.getHours() + ':' + this.startTime.getMinutes()
-    }
-  },
-  methods: {
-    updateTime () {
-      this.nowTimeLabel = new Date().toTimeString().substring(0, 5)
-      this.elapsedMH = Math.floor(this.elapsedMinutes() / 15) / 4
     },
-    elapsedMinutes () {
-      let now = Date.now()
+    elapsedMH () {
+      let now = this.nowTime.getTime()
       if (getTime(12, 45) < now) {
         now = now - 60 * 60 * 1000 // 休憩時間の1時間を引く
       } else if (getTime(11, 45) < now) {
         now = getTime(11, 45)
       }
-      return (now - this.startTime.getTime()) / 1000 / 60
+      const elapsedMinutes = (now - this.startTime.getTime()) / 1000 / 60
+
+      return Math.floor(elapsedMinutes / 15) / 4
+    }
   },
+  methods: {
     updateStartTime () {
       this.startTime = loadStartTime()
     }
